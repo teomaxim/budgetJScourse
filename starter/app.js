@@ -51,16 +51,34 @@ var budgetController = (function() {
             }
 
             // push it into our data stucture
-
+            console.log(data.allItems[type]);
             data.allItems[type].push(newItem);
 
             return newItem;
         },
 
         deleteItem: function(type, id) {
+            var ids, index;
 
-            // id = 3
+            // id = 5
             // data.allItems[type]
+            // ids = [1 2 4 5 6]
+            // index = 3
+
+            console.log(data.allItems[type]);
+            
+
+            var ids = data.allItems[type].map(function(current) {
+                return current.id;
+            });
+
+            index = ids.indexOf(id);
+
+            console.log(index);
+            
+            if (index !== -1) {
+                data.allItems[type].splice(index, 1);
+            }
         },
 
         calculateBudget: function() {
@@ -130,7 +148,7 @@ var UIController = (function() {
             if (type === 'inc') {
                 element = DOMstrings.incomeContainer;
 
-                html = `<div class="item clearfix" id="income-%id%">
+                html = `<div class="item clearfix" id="inc-%id%">
                     <div class="item__description">%description%</div>
                     <div class="right clearfix">
                         <div class="item__value">%value%</div>
@@ -142,7 +160,7 @@ var UIController = (function() {
             } else if (type='exp') {
                 element = DOMstrings.expensesContainer;
 
-                html = `<div class="item clearfix" id="expense-%id%">
+                html = `<div class="item clearfix" id="exp-%id%">
                     <div class="item__description">%description%</div>
                     <div class="right clearfix">
                         <div class="item__value">%value%</div>
@@ -251,9 +269,10 @@ var controller = (function(budgetCtrl, UICtrl){
             // inc-1 
             splitID = itemID.split('-');
             type = splitID[0];
-            ID = splitID[1];
+            ID = splitID[1];            
 
             // 1. delete item from the data
+            budgetCtrl.deleteItem(type,ID);
 
             // 2. delete the item from the UI
 
